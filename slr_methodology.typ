@@ -1,270 +1,215 @@
+#set text(lang: "pl", overhang: true)
+#set par(justify: true)
 #set heading(numbering: "1.1.")
 
+#align(center)[
+    #text([Bezpieczny i łatwy w konfiguracji sieciowy system plików], size: 20pt)
+]
+
+#let autor(imie, indeks) = {
+    align(center, {
+        [#imie]
+        [\ #indeks]
+    })
+}
+
+#grid(
+    columns: (1fr, 1fr, 1fr, 1fr),
+    gutter: 12pt,
+    autor([Mikołaj Klikowicz], 193264),
+    autor([Aleksander Iwicki], 199354),
+    autor([Piotr Trybisz], 193557),
+    autor([Wiktor Gawroński], 193285),
+)
+
+#v(1cm)
+// #pagebreak(weak: true)
+#outline()
+#pagebreak(weak: true)
+
+= Short description of the project
+
+Celem projektu jest zaproponowanie oraz weryfikacja podejścia do budowy lub wdrażania bezpiecznych systemów plików działających w warstwie sieciowej. Rozwiązanie to powinno charakteryzować się wysokim poziomem ochrony danych przy jednoczesnym zachowaniu prostoty konfiguracji i administracji. Projekt skupia się na optymalnym kompromisie między bezpieczeństwem, łatwością zarządzania a narzutem wydajnościowym.
+
+= Systematic Literature Review plan
+
 == Goals and questions
+Celem systematycznego przeglądu literatury (SLR) jest identyfikacja i porównanie mechanizmów oraz rozwiązań architektonicznych z zakresu sieciowych i rozproszonych systemów plików. Przegląd ma wskazać podejścia równoważące wymagania ochrony danych i łatwości zarządzania.
 
-*Goal of the SLR*
-
-Celem systematycznego przeglądu literatury jest identyfikacja i porównanie mechanizmów oraz rozwiązań architektonicznych, które pozwalają budować lub wdrażać sieciowe / rozproszone systemy plików o wysokim poziomie bezpieczeństwa przy jednoczesnym zachowaniu prostoty konfiguracji i administracji. Przegląd ma wskazać, jakie podejścia najlepiej równoważą wymagania dotyczące ochrony danych, łatwości zarządzania oraz akceptowalnego narzutu wydajnościowego.
-
-*Initial research questions*
-
-- *RQ1.* Jakie typy sieciowych i rozproszonych systemów plików są najczęściej opisywane w literaturze w kontekście bezpieczeństwa?
-- *RQ2.* Jakie mechanizmy bezpieczeństwa są stosowane w tych systemach: szyfrowanie w locie, szyfrowanie spoczynku, uwierzytelnianie, autoryzacja, kontrola dostępu, zarządzanie kluczami, audyt?
-- *RQ3.* Jakie rozwiązania architektoniczne wspierają prostą konfigurację i administrację, np. centralizacja polityk, integracja z Kerberosem/LDAP/AD, automatyzacja wdrożeń, przezroczyste szyfrowanie, pośredniki bezpieczeństwa, polityki po stronie klienta lub serwera?
-- *RQ4.* Jakie kompromisy są raportowane pomiędzy bezpieczeństwem, wydajnością, skalowalnością i łatwością użycia?
-- *RQ5.* Które z rozwiązań zostały zweryfikowane eksperymentalnie lub wdrożone w środowisku rzeczywistym / przemysłowym?
-- *RQ6.* Jakie luki badawcze pozostają otwarte w obszarze bezpiecznych, ale prostych w administracji systemów plików sieciowych?
+Postawiono następujące pytania badawcze:
+- RQ1. Jakie typy sieciowych i rozproszonych systemów plików są najczęściej opisywane w literaturze w kontekście bezpieczeństwa?
+- RQ2. Jakie mechanizmy bezpieczeństwa są stosowane w tych systemach (np. szyfrowanie, uwierzytelnianie, autoryzacja, zarządzanie kluczami)?
+- RQ3. Jakie rozwiązania architektoniczne wspierają prostą konfigurację i administrację (np. centralizacja polityk, automatyzacja wdrożeń)?
+- RQ4. Jakie kompromisy występują między bezpieczeństwem, wydajnością, skalowalnością a łatwością użycia?
+- RQ5. Które z rozwiązań zostały zweryfikowane eksperymentalnie lub wdrożone w środowisku przemysłowym?
 
 == Keywords
+Poniżej znajduje się zestaw słów kluczowych wraz z synonimami:
 
-Poniżej zestaw słów kluczowych z synonimami. Warto traktować je jako trzy grupy pojęć: system plików, bezpieczeństwo, prostota konfiguracji/zarządzania.
+*Sieciowe i rozproszone systemy plików*:
+network file system, distributed file system, NFS, NFSv4, pNFS, AFS, SMB, CIFS, GlusterFS, Samba.
 
-*A. Network / distributed file systems*
-- network file system
-- distributed file system
-- networked file system
-- file sharing system
-- network storage
-- parallel file system
-- NAS
-- DFS
-- NFS, NFSv4, pNFS
-- AFS
-- SMB, CIFS, Samba
-- Lustre
-- CephFS
-- GlusterFS
-- GPFS / IBM Spectrum Scale
-- BeeGFS
-- MooseFS
-- SeaweedFS
+*Mechanizmy bezpieczeństwa*:
+security, encryption, cryptograph, authentication, authorization, access control, Kerberos, TLS.
 
-*B. Security mechanisms*
-- security
-- secure / security architecture
-- encryption
-- cryptograph\*
-- confidentiality
-- integrity
-- authentication
-- authorization
-- access control
-- ACL
-- Kerberos
-- TLS
-- SSL
-- key management
-- secure channel
-- auditing
-- policy enforcement
-- identity management
-
-*C. Simplicity / administration / usability*
-- usability
-- easy to use
-- ease of use
-- simple configuration
-- configuration
-- management
-- administration
-- deploy\*
-- automation
-- maintainability
-- low overhead
-- low entry barrier
-- transparent security
-- centralized management
+*Terminy wykluczane (z uwagi na częste kolizje skrótów takich jak "NFS" z innymi dziedzinami nauki)*:
+blockchain, TNFS, hadoop, antenna, 5G, 6G, broadband, UAV, phishing.
 
 == Search strings
+Główne zapytanie wyszukujące zastosowane do przeglądu:
 
-Proponuję rozdzielić wyszukiwanie na rdzeń i wariant uzupełniający.
-
-*Fragment 1 — domena*
-```text
-("network file system" OR "distributed file system" OR "networked file system" OR "network storage" OR "parallel file system" OR "file sharing system" OR NFS OR NFSv4 OR pNFS OR AFS OR SMB OR CIFS OR Samba OR Lustre OR CephFS OR GlusterFS OR GPFS OR "IBM Spectrum Scale" OR BeeGFS OR MooseFS OR SeaweedFS)
+```SQL
+TITLE("network file system" OR "distributed file system" OR "NFS" OR "NFSv4" OR "pNFS" OR "AFS" OR "SMB" OR "CIFS" OR "GlusterFS" OR "Samba")
+AND TITLE-ABS-KEY("security" OR "encryption" OR "cryptograph*" OR "authentication" OR "authorization" OR "access control" OR "Kerberos" OR "TLS")
+AND NOT TITLE-ABS-KEY("blockchain" OR "TNFS" OR "hadoop" OR "antenna" OR "5G" OR "6G" OR "broadband" OR "UAV") 
+AND NOT ("phishing")
+AND PUBYEAR > 2019
 ```
 
-*Fragment 2 — bezpieczeństwo*
-```text
-(security OR secure OR encryption OR cryptograph* OR confidentiality OR integrity OR authentication OR authorization OR "access control" OR ACL OR Kerberos OR TLS OR SSL OR "key management" OR auditing OR "policy enforcement")
-```
-
-*Fragment 3 — prostota konfiguracji i administracji*
-```text
-(usability OR "ease of use" OR "easy to use" OR "simple configuration" OR configuration OR administration OR management OR automation OR maintainability OR deploy* OR "low overhead" OR "low entry barrier")
-```
-
-*Final search string — wersja główna*
-Najbezpieczniej użyć w głównym wyszukiwaniu:
-```text
-(Fragment 1) AND (Fragment 2)
-```
-
-*Final search string — wersja rozszerzona*
-Jeśli chcesz mocniej celować w temat prostoty zarządzania:
-```text
-(Fragment 1) AND (Fragment 2) AND (Fragment 3 OR "transparent security" OR "centralized management")
-```
-
-*Dodatkowe wykluczenia*
-```text
-NOT blockchain
-NOT phishing
-NOT TNFS
-```
-
-=== Dostosowanie do baz danych
-
-*Scopus / Elsevier*
-```text
-TITLE-ABS-KEY((Fragment 1) AND (Fragment 2))
-AND NOT TITLE-ABS-KEY(blockchain OR phishing OR TNFS)
-```
-
-*Web of Science*
-```text
-TS=((Fragment 1) AND (Fragment 2))
-NOT TS=(blockchain OR phishing OR TNFS)
-```
-
-*IEEE Xplore*
-```text
-(("All Metadata":Fragment 1) AND ("All Metadata":Fragment 2))
-NOT ("All Metadata":blockchain OR "All Metadata":phishing OR "All Metadata":TNFS)
-```
-
-*ACM Digital Library*
-```text
-(Title:Fragment 1 OR Abstract:Fragment 1)
-AND (Title:Fragment 2 OR Abstract:Fragment 2)
-AND NOT (Title:blockchain OR Abstract:blockchain OR Title:phishing OR Abstract:phishing)
-```
-
-*SpringerLink / Wiley / inne wyszukiwarki pełnotekstowe*
-- skrócić zapytanie do najważniejszych nazw systemów i najważniejszych mechanizmów bezpieczeństwa,
-- stosować cudzysłowy dla wyrażeń wielowyrazowych,
-- ograniczyć wyniki do Computer Science / Engineering / Security, jeśli baza pozwala.
-
-W praktyce dobrze działa podejście dwustopniowe:
-1. szerokie wyszukiwanie bezpieczeństwa,
-2. ręczne odfiltrowanie prac, które nie dotyczą realnych sieciowych systemów plików albo nie opisują mechanizmu/architektury.
+Zapytanie to było bazą dostosowaną składniowo do poszczególnych wyszukiwarek naukowych. Wyszukiwanie obejmowało wyłącznie publikacje z lat 2020 i nowszych (filtrowano z poziomu interfejsów baz).
 
 == Literature databases
-
-Rekomendowany zestaw baz:
+Rejestr składa się z trzech poniższych baz:
 - Scopus
-- Web of Science Core Collection
 - IEEE Xplore
-- ACM Digital Library
-- ScienceDirect (Elsevier)
 - SpringerLink
 
-Opcjonalnie jako uzupełnienie:
-- Wiley Online Library
-
-Dodatkowo można zastosować:
-- snowballing wsteczny i w przód z wybranych prac,
-- przegląd cytowań w pracach przeglądowych,
-- ręczne sprawdzenie najbardziej relewantnych konferencji i czasopism z obszaru systems / security / distributed storage.
-
 == Inclusion criteria
+Kryteria włączenia artykułów:
+- Rok publikacji: 2020 i nowsze.
+- Język: prace anglojęzyczne.
+- Typ publikacji: recenzowane artykuły branżowe i naukowe.
+- Zakres tematyczny: poruszenie tematyki działania sieciowego lub rozproszonego systemu plików.
+- Mechanizmy bezpieczeństwa: praca zgłębia przynajmniej jeden mechanizm bezpieczeństwa, uwierzytelniania, audytu lub schemat zastosowanego szyfrowania.
 
-Do SLR powinny trafić prace spełniające wszystkie lub prawie wszystkie warunki:
-- *Rok publikacji*: najlepiej od 2000 r. wzwyż, ponieważ interesują nas nowoczesne architektury bezpieczeństwa i systemy sieciowe używane we współczesnych środowiskach.
-- *Język*: angielski.
-- *Typ publikacji*: artykuły konferencyjne, artykuły czasopismowe, ewentualnie pełne artykuły warsztatowe; tylko recenzowane publikacje.
-- *Zakres tematyczny*: praca musi dotyczyć sieciowego lub rozproszonego systemu plików, protokołu dostępu do plików albo architektury przechowywania plików z dostępem przez sieć.
-- *Wymiar bezpieczeństwa*: publikacja musi opisywać przynajmniej jeden konkretny mechanizm związany z bezpieczeństwem, np. szyfrowanie, uwierzytelnianie, autoryzację, kontrolę dostępu, zarządzanie kluczami, poufność, integralność lub audyt.
-- *Wymiar administracyjny / użytecznościowy*: publikacja powinna odnosić się do wdrażania, konfiguracji, zarządzania albo złożoności administracyjnej, jeżeli jest to dostępne.
-- *Dostępność pełnego tekstu*: pełny tekst musi być dostępny do analizy.
-- *Weryfikowalność*: praca powinna zawierać opis architektury, mechanizmu albo wdrożenia na tyle szczegółowy, by dało się z niej wydobyć dane do porównania.
 
 == Exclusion criteria
-
-Wykluczyć należy publikacje, które:
-- Nie dotyczą systemów plików sieciowych / rozproszonych lub tylko marginalnie wspominają o nich.
-- Dotyczą wyłącznie ogólnego bezpieczeństwa storage / cloud / big data, bez odniesienia do warstwy file system.
-- Są o blockchainie, phishingu lub TNFS i nie mają bezpośredniego związku z badanym tematem.
-- Nie zawierają konkretnego mechanizmu lub architektury, np. są jedynie ogólną dyskusją koncepcyjną.
-- Nie mają wyników empirycznych ani formalnej walidacji, jeśli publikacja nie wnosi wyraźnej, technicznej propozycji.
-- Są streszczeniami, posterami, slajdami, notkami redakcyjnymi, książkami, rozdziałami książek, pracami dyplomowymi lub patentami.
-- Są duplikatami tej samej pracy z różnych baz — zachować należy najpełniejszą wersję.
-- Nie są w języku angielskim.
-- Nie są recenzowane lub pochodzą z mało wiarygodnych źródeł bez weryfikacji naukowej.
-- Nie zawierają żadnych danych o wpływie rozwiązania na bezpieczeństwo lub administrację.
-
+Kryteria odrzucenia (wykluczenia):
+- Publikacje całkowicie omijające tematykę warstwy systemów plików.
+- Prace koncentrujące się wyłącznie na ogólnych aspektach pamięci chmurowej (cloud storage) bez szczegółów dotyczących warstwy wymiany plików.
+- Pozycje dotyczące tematyki 5G, anten lub blockchaina, które znalazły się w wynikach przez pomyłkowe dopasowanie wieloznacznych skrótów.
+- Prace stanowiące jedynie koncepcje bez weryfikacji
 == Quality criteria
+Kryteria oceny jakości (Quality Assessment, QA) zastosowane do kwalifikacji publikacji do ekstrakcji danych (z naciskiem na rozwiązania przydatne w małym, lokalnym środowisku LAN/NAS):
 
-Poniższe kryteria nadają się do oceny jakości publikacji przed ekstrakcją danych. Można je oceniać binarnie (0/1) albo w skali 0–2.
+- *QA1.* Czy praca zawiera wyniki empiryczne (a nie wyłącznie koncepcję/rozważania teoretyczne)?
+- *QA2.* Czy jasno określono cel bezpieczeństwa i/lub model zagrożeń (np. podsłuch w LAN, ransomware, nadużycia uprawnień)?
+- *QA3.* Czy opisano badany system/protokół oraz scenariusz wdrożeniowy (SMB/NFS/DFS, LAN/NAS vs chmura/HPC)?
+- *QA4.* Czy mechanizm bezpieczeństwa jest opisany na tyle szczegółowo, aby móc ocenić integrację i koszty wdrożenia/utrzymania?
+- *QA5.* Czy ewaluacja jest odpowiednia (punkt odniesienia + metryki przepustowości/opóźnień/narzutu/zużycia CPU i RAM dla operacji plikowych)?
+- *QA6.* Czy omówiono kompromisy bezpieczeństwo–wydajność–użyteczność oraz aspekty administracyjne (konfiguracja, kompatybilność)?
+- *QA7.* Czy procedura i środowisko testowe są opisane na tyle, aby zapewnić powtarzalność?
+- *QA8.* Czy wskazano ograniczenia oraz zagrożenia dla trafności wyników (limitations/threats to validity)?
 
-- *Q1. Jasno zdefiniowany problem badawczy i model zagrożeń*: Czy autorzy precyzyjnie opisują, jaki problem bezpieczeństwa rozwiązują i wobec jakiego modelu ataku?
-- *Q2. Opis architektury lub mechanizmu jest wystarczająco szczegółowy*: Czy da się odtworzyć główne elementy rozwiązania?
-- *Q3. Rozwiązanie zawiera konkretny mechanizm bezpieczeństwa*: Czy praca pokazuje rzeczywiste zabezpieczenie, a nie tylko deklarację „secure”?
-- *Q4. Istnieje walidacja eksperymentalna lub formalna*: Czy autorzy przedstawili eksperymenty, testbed, prototyp, symulację albo formalny dowód / analizę?
-- *Q5. Zakres testów jest adekwatny*: Czy użyto realistycznego środowiska, sensownego obciążenia, liczby węzłów, użytkowników albo danych?
-- *Q6. Porównanie z istniejącymi rozwiązaniami*: Czy praca porównuje się z baseline’em, innym protokołem, inną polityką dostępu lub wcześniejszym podejściem?
-- *Q7. Uwzględnienie kosztu administracyjnego / użytecznościowego*: Czy autorzy analizują prostotę konfiguracji, liczbę kroków wdrożenia, automatyzację, integrację z IAM albo złożoność zarządzania?
-- *Q8. Omówienie ograniczeń*: Czy praca otwarcie opisuje ograniczenia, koszty, ryzyka i warunki użycia?
-
-_Przykładowa reguła kwalifikacji:_ publikacja przechodzi do ekstrakcji danych, jeśli spełnia co najmniej 5 z 8 kryteriów, przy czym obowiązkowe są Q1, Q2 i Q4 albo Q3.
 
 == Data extraction
+Dla każdej publikacji zweryfikowano następujące dane:
 
-Z każdej zakwalifikowanej publikacji warto wyciągnąć następujące dane:
+- Metadane (rok, źródło, DOI/URL).
+- Typ systemu i protokół (np. SMB/CIFS, NFS, DFS) oraz zakładane środowisko (LAN/NAS vs chmura).
+- Opis mechanizmów bezpieczeństwa (szyfrowanie w transporcie, uwierzytelnianie, autoryzacja/ACL, audyt, DLP, ochrona przed ransomware, zarządzanie kluczami — jeśli dotyczy).
+- Aspekty wdrożeniowe i administracyjne (wymagane komponenty, kroki konfiguracji, kompatybilność, ograniczenia).
+- Metody ewaluacji i metryki.
+- Najważniejsze wnioski, kompromisy oraz ograniczenia.
 
-*A. Metadane*
-- autorzy,
-- rok,
-- tytuł,
-- typ publikacji,
-- konferencja / czasopismo,
-- DOI / link.
+== SLR process
 
-*B. Charakterystyka systemu*
-- nazwa systemu plików lub protokołu,
-- rodzaj systemu: NFS, SMB/CIFS, AFS, Lustre, CephFS, GlusterFS, GPFS, BeeGFS itd.,
-- architektura: klient-serwer, rozproszona, hybrydowa, proxy/middlebox, federacyjna, P2P, chmurowa,
-- środowisko: enterprise, cloud, HPC, IoT, grid, research, industrial.
+1. *Planowanie*  
+  - Wszyscy członkowie zespołu wspólnie ustalili cele badawcze oraz pytania badawcze (RQ), a także strukturę procesu ekstrakcji danych.
 
-*C. Mechanizmy bezpieczeństwa*
-- szyfrowanie w locie,
-- szyfrowanie spoczynku,
-- uwierzytelnianie,
-- autoryzacja,
-- kontrola dostępu,
-- model tożsamości,
-- zarządzanie kluczami,
-- integralność danych,
-- poufność,
-- audyt / logging,
-- wykrywanie nadużyć / odporność na DoS.
+2. *Wybór baz artykułów*  
+  - Wybrane zostały trzy główne bazy literatury naukowej: Scopus, IEEE Xplore oraz SpringerLink.
 
-*D. Prostota konfiguracji i administracji*
-- liczba wymaganych komponentów,
-- sposób wdrożenia,
-- poziom automatyzacji,
-- integracja z istniejącą infrastrukturą (LDAP, AD, Kerberos, PKI),
-- liczba kroków konfiguracyjnych,
-- czy rozwiązanie jest transparentne dla użytkownika,
-- czy wymaga zmian po stronie klienta, serSerwera czy obu.
+3. *Doprecyzowanie zapytań wyszukiwawczych*  
+  - Opracowano szczegółowe zapytania wyszukiwawcze oparte na słowach kluczowych i operatorach logicznych, dostosowane składniowo do każdej z baz.
 
-*E. Ewaluacja*
-- typ ewaluacji: prototyp, eksperyment, testbed, symulacja, analiza formalna, wdrożenie,
-- liczba węzłów / użytkowników / hostów / datasetów,
-- scenariusz testowy,
-- benchmarki,
-- metryki bezpieczeństwa,
-- metryki wydajności: opóźnienie, przepustowość, narzut CPU, narzut sieci, czas logowania, koszt operacji plikowych,
-- metryki użyteczności / administracji, jeśli występują.
+4. *Walidacja i dostosowanie kryteriów włączenia*  
+  - Zdefiniowano oraz zweryfikowano kryteria włączenia i wykluczenia publikacji, aby zapewnić zgodność wyników z zakresem tematycznym przeglądu.
 
-*F. Wyniki i wnioski*
-- główne zalety,
-- główne ograniczenia,
-- trade-off między bezpieczeństwem a prostotą,
-- gotowość do wdrożenia produkcyjnego,
-- poziom dojrzałości rozwiązania.
+5. *Surowe wyniki wyszukiwania*  
+  - Z wybranych baz pobrano wyniki wyszukiwania w ilościach przedstawionych w sekcji „Results in numbers”.
 
-*G. Kwalifikacja do syntezy*
-- czy praca odpowiada na RQ1–RQ6,
-- czy nadaje się do porównania z innymi rozwiązaniami,
-- czy zawiera dane unikalne, czy tylko potwierdza znane podejście.
+6. *Usuwanie duplikatów*  
+  - Do identyfikacji i usuwania duplikatów wykorzystano narzędzie Zotero.
+
+7. *Selekcja na podstawie tytułu i streszczenia artykułu*  
+  - Wstępna selekcja publikacji została przeprowadzona na podstawie tytułów i abstraktów z wykorzystaniem programu Zotero.
+
+8. *Selekcja na podstawie pełnego tekstu*  
+  - Każdy członek zespołu przeprowadził analizę części artykułów. Sprawdzono zgodność z pytaniami badawczymi oraz z kryteriami jakości.
+
+9. *Ekstrakcja danych badawczych i synteza*  
+  - Z każdego zakwalifikowanego artykułu wyodrębniono kluczowe informacje, takie jak: zastosowane mechanizmy bezpieczeństwa, architektura systemu, metody ewaluacji oraz główne wnioski. Dane zostały ujednolicone i zestawione w tabelach, co umożliwiło przeprowadzenie syntezy jakościowej.
+
+10. *Raportowanie*  
+  - Na podstawie zebranych i przeanalizowanych danych opracowano końcowy raport zawierający wyniki przeglądu oraz wnioski projektowe.
+
+== Results in numbers
+Liczba znalezionych publikacji w poszczególnych bazach przed usunięciem duplikatów i selekcją:
+- Scopus: 20
+- IEEE Xplore: 127
+- SpringerLink: 159
+
+== Articles selected for data extraction
+Poniższa lista przedstawia 12 artykułów wybranych po weryfikacji i zakwalifikowanych do ekstrakcji danych:
+- @mahboubi_file_2024 ("File System Shield (FSS): A Pass-Through Strategy...")
+- @lin_knfs_2024 ("KNFS: A High-Performance, Security-Enhanced NFS...")
+- @montano_secure_2022 ("Secure File Systems for the Development of a DLP...")
+- @di_girolamo_building_2022 ("Building Blocks for Network-Accelerated Distributed File Systems")
+- @yanakieva_access_2021 ("Access control conflict resolution in distributed file systems...")
+- @ciucanu_samba_2023 ("SAMBA: A Generic Framework for Secure Federated Multi-Armed Bandits")
+- @madana_mitigating_2021 ("Mitigating Storage Challenges through Configuring NAS...")
+- @tiwari_strengthening_2024 ("Strengthening Information Relay by Using a Robust IEP...")
+- @hilgert_mount_2024 ("Mount SMB.pcap: Reconstructing file systems...")
+- @mitrovic_smb_2025 ("SMB Over QUIC: A Performance Evaluation")
+- @cho_arkfs_2023 ("ArkFS: A Distributed File System on Object Storage...")
+- @xu_practical_2022 ("Practical optimizations for lightweight distributed file system...")
+
+
+== Initial extracted data
+
+#table(
+  columns: (35%, 35%, 30%),
+  align: left,
+  stroke: 0.5pt,
+  fill: (col, row) => if row == 0 { luma(230) } else { none },
+  [*Artykuł*], [*Główne słowa kluczowe*], [*Protokół*],
+
+  [[1] --- SMB Over QUIC: A Performance Evaluation \ @mitrovic_smb_2025],
+  [QUIC protocol, SMB throughput, performance metrics, CPU load],
+  [SMB],
+  table.cell(colspan: 3)[Przedmiotem artykułu jest ocena wydajności protokołu SMB przesyłanego przez sieć z użyciem QUIC zamiast TCP. Przeprowadzono pomiary obciążenia procesora i pamięci na serwerach Windows. Wyniki pokazują, że QUIC, posiadając wbudowane szyfrowanie TLS, pozwala na bezpieczne udostępnianie plików bez trudnej konfiguracji sieci VPN. Jest to świetny przykład kompromisu między bezpieczeństwem a łatwością wdrożenia i użycia sieciowych systemów plików.],
+
+  [[2] --- KNFS: A High-Performance, Security-Enhanced NFS Based on eBPF \ @lin_knfs_2024],
+  [eBPF, performance optimization, ACL, kernel bypass],
+  [NFS],
+  table.cell(colspan: 3)[Artykuł przedstawia ulepszoną architekturę NFS. Wykorzystano technologię eBPF działającą bezpośrednio w jądrze Linuksa do monitorowania ruchu i sprawdzania list dostępu (ACL). Testy wykazały, że eBPF weryfikuje uprawnienia z bardzo małym opóźnieniem i nie obciąża znacznie procesora, dając lepsze wyniki niż np. iptables. Praca pokazuje, jak osiągnąć wysoki poziom bezpieczeństwa autoryzacji bez zauważalnego spadku wydajności serwera.],
+
+  [[3] --- Practical optimizations for lightweight distributed file system on consumer devices \ @xu_practical_2022],
+  [Lightweight DFS, consumer hardware, access protocol, WLAN],
+  [Lekki DFS],
+  table.cell(colspan: 3)[Praca opisuje lekkie rozproszone systemy plików dla sprzętu konsumenckiego lub małych firm (dyski NAS). Autorzy stworzyli prosty mechanizm przydzielania dostępu do plików, rezygnując ze skomplikowanych uprawnień standardu POSIX. Nowy protokół jest znacznie prostszy w konfiguracji i generuje niewielkie obciążenie sprzętowe.],
+
+  [[4] --- Mount SMB.pcap: Reconstructing file systems and file operations from network traffic \ @hilgert_mount_2024],
+  [Network forensics, SMB reconstruction, metadata access, packet extraction],
+  [SMB],
+  table.cell(colspan: 3)[Artykuł pokazuje, jak niebezpieczne mogą być popularne serwery udostępniające katalogi przez protokół SMB. Wykazano, że z samego zapisanego ruchu sieciowego można odtworzyć pełną strukturę plików ofiary, logi czynności i wszystkie metadane. Jest to istotny dowód na to, w jaki sposób domyślna wygoda w instalacji SMB bez odpowiedniego szyfrowania może całkowicie udostępnić wszystkie dane podpiętej maszyny potencjalnemu podsłuchiwaczowi.]
+)
+
+= Conclusions
+
+== SLR process
+Proces systematycznego przeglądu literatury pokazał, że dobór słów kluczowych był największym wyzwaniem. Główną przeszkodą była kolizja popularnych akronimów (np. "NFS") ze skrótami używanymi w innych dziedzinach (np. telekomunikacji lub inżynierii antenowej), co wymagało zastosowania licznych wykluczeń w zapytaniach. Dodatkowo zauważono, że automatyczne wyszukiwania w największych bazach często zwracają wiele ogólnych publikacji o bezpieczeństwie pamięci chmurowej (Cloud Storage), co wymusiło dokładną, ręczną filtrację pobranych abstraktów w celu skoncentrowania się na warstwie bezpieczeństwa związanej bezpośrednio z sieciowym udostępnianiem plików.
+
+== SLR results
+
+Wyniki przeglądu literatury dla 12 publikacji wskazują, że w kontekście *małego, lokalnego* i jednocześnie *bezpiecznego* systemu plików (np. domowy NAS / mała sieć firmowa) dominują trzy praktyczne kierunki rozwiązań:
+
+1. *„Bezpieczeństwo w transporcie”* — zabezpieczenie komunikacji przez wbudowane szyfrowanie (np. SMB przez QUIC/TLS) i analiza narzutów wydajnościowych @mitrovic_smb_2025.
+2. *Hardening serwera i egzekwowanie polityk* — poprawa wydajności oraz bezpieczeństwa przez mechanizmy kontroli dostępu i filtracji ruchu bliżej jądra systemu (np. eBPF w NFS) @lin_knfs_2024.
+3. *Warstwa pośrednia / „osłona”* — transparentne lub półtransparentne warstwy bezpieczeństwa (VFS/minifiltry, bramki pass-through) służące m.in. do DLP i ochrony przed ransomware ,kosztem większego narzutu i złożoności @montano_secure_2022 @mahboubi_file_2024.
+
+Jednocześnie literatura pokazuje, że dla protokołów używanych w sieciach lokalnych (SMB/CIFS) realnym zagrożeniem jest możliwość odtworzenia hierarchii plików i operacji z samego ruchu sieciowego (np. z PCAP), jeśli transmisja nie jest odpowiednio zabezpieczona @hilgert_mount_2024. Wniosek ten bezpośrednio wzmacnia wymaganie „szyfrowanie i integralność w transporcie” jako podstawowy element dla projektu.
+
+= Literature
+#bibliography("bib.bib", full: true)
