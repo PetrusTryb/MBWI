@@ -1,6 +1,29 @@
-#set heading(numbering: "1.1.")
+#set text(lang: "pl", overhang: true)
+#set par(justify: true)
+#set heading(numbering: "1.1")
 
-== Goals and questions
+#align(center)[
+    #text([Bezpieczny i łatwy w konfiguracji sieciowy system plików], weight: "bold", size: 20pt)
+]
+
+#let autor(imie, indeks) = {
+    align(center, {
+        [*#text(12pt, imie)*]
+        [\ #indeks]
+    })
+}
+
+#grid(
+    columns: (1fr, 1fr, 1fr, 1fr),
+    gutter: 12pt,
+    autor([Mikołaj Klikowicz], 193264),
+    autor([Aleksander Iwicki], 199354),
+    autor([Piotr Trybisz], 193557),
+    autor([Wiktor Gawroński], 193285),
+)
+#v(1cm)
+
+= Goals and questions
 
 *Goal of the SLR*
 
@@ -13,164 +36,72 @@ Celem systematycznego przeglądu literatury jest identyfikacja i porównanie mec
 - *RQ3.* Jakie rozwiązania architektoniczne wspierają prostą konfigurację i administrację, np. centralizacja polityk, integracja z Kerberosem/LDAP/AD, automatyzacja wdrożeń, przezroczyste szyfrowanie, pośredniki bezpieczeństwa, polityki po stronie klienta lub serwera?
 - *RQ4.* Jakie kompromisy są raportowane pomiędzy bezpieczeństwem, wydajnością, skalowalnością i łatwością użycia?
 - *RQ5.* Które z rozwiązań zostały zweryfikowane eksperymentalnie lub wdrożone w środowisku rzeczywistym / przemysłowym?
-- *RQ6.* Jakie luki badawcze pozostają otwarte w obszarze bezpiecznych, ale prostych w administracji systemów plików sieciowych?
 
-== Keywords
+= Keywords
 
 Poniżej zestaw słów kluczowych z synonimami. Warto traktować je jako trzy grupy pojęć: system plików, bezpieczeństwo, prostota konfiguracji/zarządzania.
 
 *A. Network / distributed file systems*
 - network file system
 - distributed file system
-- networked file system
-- file sharing system
-- network storage
-- parallel file system
-- NAS
-- DFS
-- NFS, NFSv4, pNFS
+- NFS
+- NFSv4
+- pNFS
 - AFS
-- SMB, CIFS, Samba
-- Lustre
-- CephFS
+- SMB
+- CIFS
 - GlusterFS
-- GPFS / IBM Spectrum Scale
-- BeeGFS
-- MooseFS
-- SeaweedFS
+- Samba
 
 *B. Security mechanisms*
 - security
-- secure / security architecture
 - encryption
 - cryptograph\*
-- confidentiality
-- integrity
 - authentication
 - authorization
 - access control
-- ACL
 - Kerberos
 - TLS
-- SSL
-- key management
-- secure channel
-- auditing
-- policy enforcement
-- identity management
 
-*C. Simplicity / administration / usability*
-- usability
-- easy to use
-- ease of use
-- simple configuration
-- configuration
-- management
-- administration
-- deploy\*
-- automation
-- maintainability
-- low overhead
-- low entry barrier
-- transparent security
-- centralized management
+*C. Excluded context terms (do odrzucenia)*
+Ze względu na częste kolizje popularnych skrótów (np. "NFS") ze skrótami używanymi w innych dziedzinach nauki (co znacząco utrudniało wyszukiwanie), do zapytania wybrano następujące wymuszone wykluczenia:
+- blockchain
+- TNFS
+- hadoop
+- antenna
+- 5G
+- 6G
+- broadband
+- UAV
+- phishing
 
 == Search strings
 
-Proponuję rozdzielić wyszukiwanie na rdzeń i wariant uzupełniający.
+Poniżej znajduje się główne zapytanie wyszukujące (search string) zastosowane do przeglądu:
 
-*Fragment 1 — domena*
 ```text
-("network file system" OR "distributed file system" OR "networked file system" OR "network storage" OR "parallel file system" OR "file sharing system" OR NFS OR NFSv4 OR pNFS OR AFS OR SMB OR CIFS OR Samba OR Lustre OR CephFS OR GlusterFS OR GPFS OR "IBM Spectrum Scale" OR BeeGFS OR MooseFS OR SeaweedFS)
+TITLE( "network file system" OR "distributed file system" OR "NFS" OR "NFSv4" OR "pNFS" OR "AFS" OR "SMB" OR "CIFS" OR "GlusterFS" OR "Samba")
+AND TITLE-ABS-KEY( "security" OR "encryption" OR "cryptograph*" OR "authentication" OR "authorization" OR "access control" OR "Kerberos" OR "TLS")
+AND NOT TITLE-ABS-KEY("blockchain" OR "TNFS" OR "hadoop" OR "antenna" OR "5G" OR "6G" OR "broadband" OR "UAV") 
+AND NOT ("phishing")
+AND PUBYEAR > 2019
 ```
 
-*Fragment 2 — bezpieczeństwo*
-```text
-(security OR secure OR encryption OR cryptograph* OR confidentiality OR integrity OR authentication OR authorization OR "access control" OR ACL OR Kerberos OR TLS OR SSL OR "key management" OR auditing OR "policy enforcement")
-```
+== Dostosowanie do baz danych
 
-*Fragment 3 — prostota konfiguracji i administracji*
-```text
-(usability OR "ease of use" OR "easy to use" OR "simple configuration" OR configuration OR administration OR management OR automation OR maintainability OR deploy* OR "low overhead" OR "low entry barrier")
-```
-
-*Final search string — wersja główna*
-Najbezpieczniej użyć w głównym wyszukiwaniu:
-```text
-(Fragment 1) AND (Fragment 2)
-```
-
-*Final search string — wersja rozszerzona*
-Jeśli chcesz mocniej celować w temat prostoty zarządzania:
-```text
-(Fragment 1) AND (Fragment 2) AND (Fragment 3 OR "transparent security" OR "centralized management")
-```
-
-*Dodatkowe wykluczenia*
-```text
-NOT blockchain
-NOT phishing
-NOT TNFS
-```
-
-=== Dostosowanie do baz danych
-
-*Scopus / Elsevier*
-```text
-TITLE-ABS-KEY((Fragment 1) AND (Fragment 2))
-AND NOT TITLE-ABS-KEY(blockchain OR phishing OR TNFS)
-```
-
-*Web of Science*
-```text
-TS=((Fragment 1) AND (Fragment 2))
-NOT TS=(blockchain OR phishing OR TNFS)
-```
-
-*IEEE Xplore*
-```text
-(("All Metadata":Fragment 1) AND ("All Metadata":Fragment 2))
-NOT ("All Metadata":blockchain OR "All Metadata":phishing OR "All Metadata":TNFS)
-```
-
-*ACM Digital Library*
-```text
-(Title:Fragment 1 OR Abstract:Fragment 1)
-AND (Title:Fragment 2 OR Abstract:Fragment 2)
-AND NOT (Title:blockchain OR Abstract:blockchain OR Title:phishing OR Abstract:phishing)
-```
-
-*SpringerLink / Wiley / inne wyszukiwarki pełnotekstowe*
-- skrócić zapytanie do najważniejszych nazw systemów i najważniejszych mechanizmów bezpieczeństwa,
-- stosować cudzysłowy dla wyrażeń wielowyrazowych,
-- ograniczyć wyniki do Computer Science / Engineering / Security, jeśli baza pozwala.
-
-W praktyce dobrze działa podejście dwustopniowe:
-1. szerokie wyszukiwanie bezpieczeństwa,
-2. ręczne odfiltrowanie prac, które nie dotyczą realnych sieciowych systemów plików albo nie opisują mechanizmu/architektury.
+Powyższe zapytanie stanowiło główny trzon. Zostało ono jednak dostosowane pod względem składni w zależności od wyszukiwarki i bazy danych (Scopus, IEEE Xplore, SpringerLink). Należy zaznaczyć, że ramy czasowe, ograniczające datę publikacji do lat po 2019 roku, były konsekwentnie stosowane we wszystkich bazach (najczęściej wybierano je za pomocą filtrów w interfejsie graficznym podczas wyszukiwania).
 
 == Literature databases
 
-Rekomendowany zestaw baz:
+Rekomendowany zestaw baz stanowiły wyłącznie trzy pozycje:
 - Scopus
-- Web of Science Core Collection
 - IEEE Xplore
-- ACM Digital Library
-- ScienceDirect (Elsevier)
 - SpringerLink
-
-Opcjonalnie jako uzupełnienie:
-- Wiley Online Library
-
-Dodatkowo można zastosować:
-- snowballing wsteczny i w przód z wybranych prac,
-- przegląd cytowań w pracach przeglądowych,
-- ręczne sprawdzenie najbardziej relewantnych konferencji i czasopism z obszaru systems / security / distributed storage.
 
 == Inclusion criteria
 
 Do SLR powinny trafić prace spełniające wszystkie lub prawie wszystkie warunki:
-- *Rok publikacji*: najlepiej od 2000 r. wzwyż, ponieważ interesują nas nowoczesne architektury bezpieczeństwa i systemy sieciowe używane we współczesnych środowiskach.
+- *Rok publikacji*: rok 2020 i nowsze (zapytania "PUBYEAR > 2019"), ponieważ interesują nas nowoczesne architektury bezpieczeństwa i systemy sieciowe używane we współczesnych środowiskach.
 - *Język*: angielski.
 - *Typ publikacji*: artykuły konferencyjne, artykuły czasopismowe, ewentualnie pełne artykuły warsztatowe; tylko recenzowane publikacje.
 - *Zakres tematyczny*: praca musi dotyczyć sieciowego lub rozproszonego systemu plików, protokołu dostępu do plików albo architektury przechowywania plików z dostępem przez sieć.
@@ -208,7 +139,7 @@ Poniższe kryteria nadają się do oceny jakości publikacji przed ekstrakcją d
 
 _Przykładowa reguła kwalifikacji:_ publikacja przechodzi do ekstrakcji danych, jeśli spełnia co najmniej 5 z 8 kryteriów, przy czym obowiązkowe są Q1, Q2 i Q4 albo Q3.
 
-== Data extraction
+=== Data extraction
 
 Z każdej zakwalifikowanej publikacji warto wyciągnąć następujące dane:
 
@@ -265,22 +196,56 @@ Z każdej zakwalifikowanej publikacji warto wyciągnąć następujące dane:
 - poziom dojrzałości rozwiązania.
 
 *G. Kwalifikacja do syntezy*
-- czy praca odpowiada na RQ1–RQ6,
+- czy praca odpowiada na RQ1–RQ5,
 - czy nadaje się do porównania z innymi rozwiązaniami,
 - czy zawiera dane unikalne, czy tylko potwierdza znane podejście.
 
+== SLR process
+
++ *Planowanie* \
+  Wszyscy członkowie wspólnie ustalili pytania oraz cele ekstrakcji.
++ *Wybór baz artykułów* \
+  Wybrane zostały Scopus, IEEE Xplore oraz SpringerLink.
++ *Doprecyzowanie zapytań wyszukiwawczych*
++ *Walidacja i dostosowanie kryteriów włączenia*
++ *Surowe wyniki wyszukiwania* \
+  Z wybranych baz pobrane zostały wyniki wyszukiwania (liczby podane w dalszych sekcjach z wynikami).
++ *Usuwanie duplikatów* \
+  Zastosowany został program Zotero.
++ *Selekcja na podstawie tytułu i streszczenia artykułu* \
+  Zastosowany został program Zotero.
++ *Selekcja na podstawie pełnego tekstu* \
+  Artykuły zostały rozdzielone pomiędzy członków zespołu do szczegółowej lektury. Każda pozycja została zweryfikowana pod kątem merytorycznej zgodności z pytaniami badawczymi oraz spełnienia kryteriów jakości (QA). Każdy wybrany artykuł był dodatkowo weryfikowany przez innego członka zespołu.
++ *Ekstrakcja danych badawczych i synteza* \
+  Z każdego zaakceptowanego artykułu wydobyto kluczowe informacje dotyczące: zaproponowanej architektury, mechanizmów bezpieczeństwa, łatwości administracji i wdrożenia oraz głównych wniosków na temat kompromisów z wydajnością. Dane te zostały ujednolicone i zestawione w tabelach, co pozwoliło na przeprowadzenie syntezy jakościowej i wyciągnięcie wniosków dotyczących aktualnego stanu wiedzy w obszarze bezpiecznych, ale prostych w zarządzeniu sieciowych systemów plików.
++ *Raportowanie*
+
+== Wyniki wyszukiwania (Search Results)
+
+Wstępne przeszukiwanie baz danych (zgodnie z przyjętą strategią) przyniosło łącznie *306* rezultatów:
+- *Scopus*: 20 publikacji
+- *IEEE Xplore*: 127 publikacji
+- *SpringerLink*: 159 publikacji
+
+Wyniki te zostaną poddane deduplikacji oraz dalszej selekcji zgodnie z kryteriami włączenia i wykluczenia.
+
 == Wyniki selekcji pilotażowej (Pilot Screening)
 
-Na podstawie wstępnego przeglądu repozytorium (`papers/NFS.bib` zawierającego 9 pozycji) przeprowadzono pilotażową weryfikację kryteriów włączenia i wykluczenia. Wyniki prezentują się następująco:
+Na podstawie ręcznie wyselekcjonowanego zbioru wynikowego z pliku `bib.bib` (12 pozycji) przeprowadzono pilotażową weryfikację. Na obecnym etapie prac *wszystkie 12 ręcznie wyszukanych i wprowadzonych artykułów zostało tymczasowo zaakceptowanych* do pełnej analizy (ewentualne odrzucenia i lista prac wykluczonych zostaną uzupełnione weryfikacją w kolejnych krokach).
 
-*Zakwalifikowane do pełnej ekstrakcji danych (Included):*
-- *Abukari et al., 2024:* _"Implementation of a Secured Scalable File Server System"_ – spełnia wymogi dotyczące rozproszonych systemów plików, opisuje mechanizmy zabezpieczeń, przypisywania ról oraz administracji/użyteczności systemem na poziomie korporacyjnym.
-- *Harrington & Jensen, 2003:* _"Cryptographic access control in a distributed file system"_ – doskonałe dopasowanie. Skupia się na DFS w środowiskach nieufnych, prezentuje kryptograficzną implementację kontroli dostępu do plików wraz z walidacją eksperymentalną.
-- *Durvasulu, 2025:* _"Understanding Network File Systems (NFS): Architecture, Variations, and Implementation"_ – przeglądowa, ale dotyka szczegółów protokołu sieciowego w wersjach historycznych, z silnym naciskiem na mechanizmy bezpieczeństwa w nowszych wersjach systemu NFS.
+*Prace zakwalifikowane do ekstrakcji (Included):*
+- @mahboubi_file_2024 _("File System Shield (FSS): A Pass-Through Strategy...")_
+- @lin_knfs_2024 _("KNFS: A High-Performance, Security-Enhanced NFS...")_
+- @montano_secure_2022 _("Secure File Systems for the Development of a DLP...")_
+- @di_girolamo_building_2022 _("Building Blocks for Network-Accelerated Distributed File Systems")_
+- @yanakieva_access_2021 _("Access control conflict resolution in distributed file systems...")_
+- @ciucanu_samba_2023 _("SAMBA: A Generic Framework for Secure Federated Multi-Armed Bandits")_
+- @madana_mitigating_2021 _("Mitigating Storage Challenges through Configuring NAS...")_
+- @tiwari_strengthening_2024 _("Strengthening Information Relay by Using a Robust IEP...")_
+- @hilgert_mount_2024 _("Mount SMB.pcap: Reconstructing file systems...")_
+- @mitrovic_smb_2025 _("SMB Over QUIC: A Performance Evaluation")_
+- @cho_arkfs_2023 _("ArkFS: A Distributed File System on Object Storage...")_
+- @xu_practical_2022 _("Practical optimizations for lightweight distributed file system...")_
 
-*Odrzucone na poziomie tytułu i abstraktu (Excluded):*
-- *Liao & Abadi, 2023* _("FileScale: Fast and Elastic Metadata Management...")_ – system DFS na ogromną skalę, lecz abstrakt skupia się wyłącznie na problemach wydajności i zarządzania metadanymi zamiast na wymiarze cyberbezpieczeństwa. *(Kryterium wykluczenia: brak dedykowanego mechanizmu/architektury bezpieczeństwa)*.
-- *Chatterjee* _("Optimizing Samba File Sharing Performance on Raspberry Pi...")_ (duplikaty) – tematyka skupia się niemal wyłącznie na optymalizacji narzutów w warstwach I/O, procesora oraz sieci dla protokołu plików Samba, a o bezpieczeństwie jedynie marginalnie wspomina na końcu w odniesieniu do uwarunkowań konfiguracyjnych.
-- *Singh, 2025* _("Workload-Driven Perspectives on Networked Filesystems...")_ – czysty benchmarking opóźnień między różnymi wersjami NFS a rozwiązaniami na kształt SMB/CIFS za pomocą LADDIS/Postmark. *(Kryterium wykluczenia: brak komponentu bezpieczeństwa)*.
-- *Kumar* _("Review on Network Security and Cryptography")_ – zbyt ogólna publikacja traktująca o modelach kryptograficznych w transmisjach przez internet; zupełny brak nawiązań do rozwiązań z obszaru sieciowych systemów plików.
-- *Gudes, 1980* _("The Design of a Cryptography Based Secure File System")_ – pomimo pełnej zgodności zakresowej ze słowami kluczowymi, opublikowane na wiele lat przed ustaloną dolną barierą czasu wyszukiwania. *(Kryterium wykluczenia: Rok publikacji < 2000 r.)*.
+#pagebreak(weak: true)
+#bibliography("bib.bib", full: true)
