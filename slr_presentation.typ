@@ -115,10 +115,25 @@
   - wyniki i wnioski eksperymentalne
 ]
 
+#slide("9. Pilotażowa Ocena Zbioru (Pilot Screening)")[
+  #set text(size: 19pt)
+  Uruchomiono pilotaż procedury na bazie 9 stanowisk z lokalnego repozytorium (`NFS.bib`).
+  
+  *WŁĄCZONE DO EKSTRAKCJI (Included):*
+  - _"Implementation of a Secured Scalable File Server System"_ (Abukari, 2024) -- opisana kompletna architektura sieciowa uwzględniająca uprawnienia.
+  - _"Cryptographic access control in a DFS"_ (Harrington, 2003) -- walidacja użyteczności podziałów kompetencyjnych opartych na kryptografii.
+  - _"Understanding Network File Systems (NFS)..."_ (Durvasulu, 2025) -- kompleksowy opis mechanizmów wsparcia.
+
+  *ODRZUCONE Z POWODU (Excluded):*
+  - _FileScale..._ (Liao, 2023) oraz _Workload-Driven Perspectives..._ (Singh, 2025) --- brak sekcji skupiającej się na cyberbezpieczeństwie. Wielość pomiarów I/O, brak audytów, czy zarządzania tożsamością.
+  - _The Design of a Cryptography Based Secure File System_ (Gudes, 1980) --- brak spełnienia kryterium zakresu daty (rok publ. < 2000 r.).
+  - Publikacje Kumar oraz Chatterjee --- zbyt ogólny zarys bezpieczeństwa lub całkowity rozmiar badawczy rzucony w konteksty wydajności SMB/Raspberry.
+]
+
 #page[
   #align(center + horizon)[
     #text(size: 40pt, weight: "bold", fill: rgb("004488"))[Dziękuję za uwagę]
     #v(1em)
-    #text(size: 24pt)[Przystępujemy do weryfikacji zebranego eksportu na bazie podanych kryteriów.]
+    #text(size: 24pt)[Przystępujemy do ekstrakcji i weryfikacji zebranego eksportu.]
   ]
 ]

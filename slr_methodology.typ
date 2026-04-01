@@ -268,3 +268,19 @@ Z każdej zakwalifikowanej publikacji warto wyciągnąć następujące dane:
 - czy praca odpowiada na RQ1–RQ6,
 - czy nadaje się do porównania z innymi rozwiązaniami,
 - czy zawiera dane unikalne, czy tylko potwierdza znane podejście.
+
+== Wyniki selekcji pilotażowej (Pilot Screening)
+
+Na podstawie wstępnego przeglądu repozytorium (`papers/NFS.bib` zawierającego 9 pozycji) przeprowadzono pilotażową weryfikację kryteriów włączenia i wykluczenia. Wyniki prezentują się następująco:
+
+*Zakwalifikowane do pełnej ekstrakcji danych (Included):*
+- *Abukari et al., 2024:* _"Implementation of a Secured Scalable File Server System"_ – spełnia wymogi dotyczące rozproszonych systemów plików, opisuje mechanizmy zabezpieczeń, przypisywania ról oraz administracji/użyteczności systemem na poziomie korporacyjnym.
+- *Harrington & Jensen, 2003:* _"Cryptographic access control in a distributed file system"_ – doskonałe dopasowanie. Skupia się na DFS w środowiskach nieufnych, prezentuje kryptograficzną implementację kontroli dostępu do plików wraz z walidacją eksperymentalną.
+- *Durvasulu, 2025:* _"Understanding Network File Systems (NFS): Architecture, Variations, and Implementation"_ – przeglądowa, ale dotyka szczegółów protokołu sieciowego w wersjach historycznych, z silnym naciskiem na mechanizmy bezpieczeństwa w nowszych wersjach systemu NFS.
+
+*Odrzucone na poziomie tytułu i abstraktu (Excluded):*
+- *Liao & Abadi, 2023* _("FileScale: Fast and Elastic Metadata Management...")_ – system DFS na ogromną skalę, lecz abstrakt skupia się wyłącznie na problemach wydajności i zarządzania metadanymi zamiast na wymiarze cyberbezpieczeństwa. *(Kryterium wykluczenia: brak dedykowanego mechanizmu/architektury bezpieczeństwa)*.
+- *Chatterjee* _("Optimizing Samba File Sharing Performance on Raspberry Pi...")_ (duplikaty) – tematyka skupia się niemal wyłącznie na optymalizacji narzutów w warstwach I/O, procesora oraz sieci dla protokołu plików Samba, a o bezpieczeństwie jedynie marginalnie wspomina na końcu w odniesieniu do uwarunkowań konfiguracyjnych.
+- *Singh, 2025* _("Workload-Driven Perspectives on Networked Filesystems...")_ – czysty benchmarking opóźnień między różnymi wersjami NFS a rozwiązaniami na kształt SMB/CIFS za pomocą LADDIS/Postmark. *(Kryterium wykluczenia: brak komponentu bezpieczeństwa)*.
+- *Kumar* _("Review on Network Security and Cryptography")_ – zbyt ogólna publikacja traktująca o modelach kryptograficznych w transmisjach przez internet; zupełny brak nawiązań do rozwiązań z obszaru sieciowych systemów plików.
+- *Gudes, 1980* _("The Design of a Cryptography Based Secure File System")_ – pomimo pełnej zgodności zakresowej ze słowami kluczowymi, opublikowane na wiele lat przed ustaloną dolną barierą czasu wyszukiwania. *(Kryterium wykluczenia: Rok publikacji < 2000 r.)*.
